@@ -21,4 +21,8 @@ public class DbService {
     public Task getTaskById(Long id) {
         return taskRepository.findById(id).orElse(null);
     }
+
+    public Task saveTask(final Task task) {
+        return taskRepository.save(task);
+    }
 }
