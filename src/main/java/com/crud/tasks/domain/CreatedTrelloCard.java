@@ -14,6 +14,12 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CreatedTrelloCard {;
 
+    public CreatedTrelloCard(String id, String name, String shortUrl) {
+        this.id = id;
+        this.name = name;
+        this.shortUrl = shortUrl;
+    }
+
     @JsonProperty("id")
     private String id;
 

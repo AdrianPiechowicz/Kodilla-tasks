@@ -6,33 +6,27 @@ import com.crud.tasks.domain.TrelloBoardDto;
 import com.crud.tasks.domain.TrelloCardDto;
 import com.crud.tasks.trello.client.NullException;
 import com.crud.tasks.trello.client.TrelloClient;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/v1/trello")
 public class TrelloController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(TrelloClient.class);
 
     @Autowired
     private TrelloClient trelloClient;
 
     @RequestMapping(method = RequestMethod.GET, value = "getTrelloBoards")
-    public void getTrelloBoards() throws NullException {
+    public List<TrelloBoardDto> getTrelloBoards() {
 
-        List<TrelloBoardDto> trelloBoards = trelloClient.getTrelloBoards().orElseThrow(NullException::new);
-        trelloBoards.forEach(trelloBoardDto -> {
-            System.out.println(trelloBoardDto.getName() + " - " + trelloBoardDto.getId());
-
-            System.out.println("This board contains lists: ");
-
-            trelloBoardDto.getLists().forEach(trelloList ->
-                    System.out.println(trelloList.getName() + " - " + trelloList.getId() + " - " + trelloList.isClosed()));
-        });
+        return trelloClient.getTrelloBoards();
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "createTrelloCard")
@@ -46,7 +40,7 @@ public class TrelloController {
         try {
             System.out.println("trello: {\n board: " + result.getBadges().getAttachmentsByTypeDto().getTrello().getBoard() + "\n card: " + result.getBadges().getAttachmentsByTypeDto().getTrello().getCard() ) ;
         } catch (NullPointerException e) {
-            System.out.println(e.getMessage());
+            LOGGER.error(e.getMessage(),e);
             Trello tempTrello = new Trello();
             System.out.println("trello: {\n board: " + tempTrello.getBoard() + "\n card: " + tempTrello.getCard() ) ;
         }
