@@ -71,6 +71,15 @@ public class TrelloClientTest {
                 "top",
                 "test_id"
         );
+
+        URI uri = new URI("http://test.com/cards?key=test&token=test&name=Test%20task&desc=Test%20Description&pos=top&idList=test_id");
+
+        CreatedTrelloCard createdTrelloCard = new CreatedTrelloCard(
+                "1",
+                "Test task",
+                "http://test.com"
+        );
+
         /*URI uri = UriComponentsBuilder.fromHttpUrl(trelloConfig.getTrelloApiEndpoint() + "/cards")
                 .queryParam("key", trelloConfig.getTrelloAppKey())
                 .queryParam("token", trelloConfig.getTrelloToken())
@@ -78,15 +87,6 @@ public class TrelloClientTest {
                 .queryParam("desc", trelloCardDto.getDescription())
                 .queryParam("pos", trelloCardDto.getPos())
                 .queryParam("idList", trelloCardDto.getListId()).build().encode().toUri(); */
-
-        URI uri = new URI("http://test.com/cards?key=test&token=test&name=Test%20task&desc=Test%20Description&pos=top&idList=test_id");
-
-
-        CreatedTrelloCard createdTrelloCard = new CreatedTrelloCard(
-                "1",
-                "Test task",
-                "http://test.com"
-        );
 
         when(restTemplate.postForObject(uri, null, CreatedTrelloCard.class)).thenReturn(createdTrelloCard);
 
@@ -98,5 +98,18 @@ public class TrelloClientTest {
         assertEquals("Test task", newCard.getName());
         assertEquals("http://test.com", newCard.getShortUrl());
 
+    }
+
+    @Test
+    public void shouldReturnEmptyList() throws URISyntaxException {
+        //given
+        URI url = new URI("http://test.com/members/"+trelloConfig.getTrelloUsername() +"/boards?key=test&token=test&fields=name,id&lists=all");
+        when(restTemplate.getForObject(url, TrelloBoardDto[].class)).thenReturn(null);
+
+        //when
+        List<TrelloBoardDto> fetchedTrelloBoards = trelloClient.getTrelloBoards();
+
+        //then
+        assertEquals(0,fetchedTrelloBoards.size());
     }
 }
