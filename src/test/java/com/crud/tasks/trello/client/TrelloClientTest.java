@@ -71,13 +71,17 @@ public class TrelloClientTest {
                 "top",
                 "test_id"
         );
-        URI uri = UriComponentsBuilder.fromHttpUrl(trelloConfig.getTrelloApiEndpoint() + "/cards")
+        /*URI uri = UriComponentsBuilder.fromHttpUrl(trelloConfig.getTrelloApiEndpoint() + "/cards")
                 .queryParam("key", trelloConfig.getTrelloAppKey())
                 .queryParam("token", trelloConfig.getTrelloToken())
                 .queryParam("name", trelloCardDto.getName())
                 .queryParam("desc", trelloCardDto.getDescription())
                 .queryParam("pos", trelloCardDto.getPos())
-                .queryParam("idList", trelloCardDto.getListId()).build().encode().toUri();
+                .queryParam("idList", trelloCardDto.getListId()).build().encode().toUri(); */
+
+        URI uri = new URI("http://test.com/cards?key=test&token=test&name=Test%20task&desc=Test%20Description&pos=top&idList=test_id");
+
+
         CreatedTrelloCard createdTrelloCard = new CreatedTrelloCard(
                 "1",
                 "Test task",
