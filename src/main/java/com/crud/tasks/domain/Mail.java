@@ -10,4 +10,8 @@ public class Mail {
     private String subject;
     private String message;
     private String CcTo;
+
+    public Mail(final String mailTo,final String subject,final String message) {
+
+    }
 }
