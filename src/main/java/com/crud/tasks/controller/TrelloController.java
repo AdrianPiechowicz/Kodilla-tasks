@@ -4,6 +4,7 @@ import com.crud.tasks.domain.CreatedTrelloCard;
 import com.crud.tasks.domain.Trello;
 import com.crud.tasks.domain.TrelloBoardDto;
 import com.crud.tasks.domain.TrelloCardDto;
+import com.crud.tasks.service.TrelloService;
 import com.crud.tasks.trello.client.NullException;
 import com.crud.tasks.trello.client.TrelloClient;
 import org.slf4j.Logger;
@@ -21,20 +22,20 @@ public class TrelloController {
     private static final Logger LOGGER = LoggerFactory.getLogger(TrelloClient.class);
 
     @Autowired
-    private TrelloClient trelloClient;
+    private TrelloService trelloService;
 
-    @RequestMapping(method = RequestMethod.GET, value = "getTrelloBoards")
+    @RequestMapping(method = RequestMethod.GET, value = "/getTrelloBoards")
     public List<TrelloBoardDto> getTrelloBoards() {
 
-        return trelloClient.getTrelloBoards();
+        return trelloService.fetchTrelloBoards();
     }
 
-    @RequestMapping(method = RequestMethod.POST, value = "createTrelloCard")
+    @RequestMapping(method = RequestMethod.POST, value = "/createTrelloCard")
     public CreatedTrelloCard createTrelloCard(@RequestBody TrelloCardDto trelloCardDto) {
-        CreatedTrelloCard result = trelloClient.createTrelloCard(trelloCardDto);
+        //CreatedTrelloCard result = trelloService.createdTrelloCard(trelloCardDto);
+        return trelloService.createdTrelloCard(trelloCardDto);
 
-
-            System.out.println("{\n" + "id: " + result.getId() + "\nbadges: {\n");
+        /*    System.out.println("{\n" + "id: " + result.getId() + "\nbadges: {\n");
             System.out.println("Votes " + result.getBadges().getVotes() + result.getBadges().getAttachmentsByTypeDto());
             System.out.println("attachmentsByType: {\n");
         try {
@@ -45,6 +46,6 @@ public class TrelloController {
             System.out.println("trello: {\n board: " + tempTrello.getBoard() + "\n card: " + tempTrello.getCard() ) ;
         }
             return result;
-
+         */
     }
 }
